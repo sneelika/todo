@@ -1,27 +1,27 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 import connectToDatabase from "./db";
 import categoryRoutes from "./routes/category.routes";
 import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
+import { authMiddleware } from "./middleware";
+import { errorMiddleware } from "./middleware/error";
 
 dotenv.config();
-const application = express();
+const app = express();
 
-application.use(express.json());
-application.use(cors());
+app.use(express.json());
 
 connectToDatabase();
 
-application.get("/ping", (request: Request, response: Response) => {
+app.get("/ping", (request: Request, response: Response) => {
   response.send("Pong");
 });
 
-application.use("/users", userRoutes);
-application.use("/categories", categoryRoutes);
-application.use("/tasks", taskRoutes);
+app.use("/users", userRoutes, errorMiddleware);
+app.use("/categories", authMiddleware, categoryRoutes, errorMiddleware);
+app.use("/tasks", authMiddleware, taskRoutes, errorMiddleware);
 
-application.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server up and running");
 });

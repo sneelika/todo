@@ -9,33 +9,17 @@ import {
   getTasksForToday,
   toggleTaskStatus,
 } from "../handlers/task.handler";
-import { authMiddleware } from "../middleware";
-import { errorMiddleware } from "../middleware/error";
+
 
 const taskRoutes = express.Router();
 
-taskRoutes.get("/", authMiddleware, getAllTasks, errorMiddleware);
-taskRoutes.get(
-  "/tasks-by-categories/:id",
-  authMiddleware,
-  getAllTasksByCategory,
-  errorMiddleware
-);
-taskRoutes.get(
-  "/completed",
-  authMiddleware,
-  getAllCompletedTasks,
-  errorMiddleware
-);
-taskRoutes.get("/today", authMiddleware, getTasksForToday, errorMiddleware);
-taskRoutes.post("/create", authMiddleware, createTask, errorMiddleware);
-taskRoutes.put(
-  "/update/:id",
-  authMiddleware,
-  toggleTaskStatus,
-  errorMiddleware
-);
-taskRoutes.delete("/:id", authMiddleware, deleteTask, errorMiddleware);
-taskRoutes.put("/edit/:id", authMiddleware, editTask, errorMiddleware);
+taskRoutes.get("/", getAllTasks);
+taskRoutes.get("/tasks-by-categories/:id", getAllTasksByCategory);
+taskRoutes.get("/completed", getAllCompletedTasks);
+taskRoutes.get("/today", getTasksForToday);
+taskRoutes.post("/create", createTask);
+taskRoutes.put("/update/:id", toggleTaskStatus);
+taskRoutes.delete("/:id", deleteTask);
+taskRoutes.put("/edit/:id", editTask);
 
 export default taskRoutes;

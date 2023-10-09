@@ -6,15 +6,13 @@ import {
   getCategoryById,
   updateCategory,
 } from "../handlers/category.handler";
-import { authMiddleware } from "../middleware";
-import { errorMiddleware } from "../middleware/error";
 
 const categoryRoutes = express.Router();
 
-categoryRoutes.get("/", authMiddleware, getAllCategories, errorMiddleware);
-categoryRoutes.get("/:id", authMiddleware, getCategoryById, errorMiddleware);
-categoryRoutes.post("/create", authMiddleware, createCategory, errorMiddleware);
-categoryRoutes.delete("/:id", authMiddleware, deleteCategory, errorMiddleware);
-categoryRoutes.put("/update", authMiddleware, updateCategory, errorMiddleware);
+categoryRoutes.get("/", getAllCategories);
+categoryRoutes.get("/:id", getCategoryById);
+categoryRoutes.post("/create", createCategory);
+categoryRoutes.delete("/:id", deleteCategory);
+categoryRoutes.put("/update", updateCategory);
 
 export default categoryRoutes;

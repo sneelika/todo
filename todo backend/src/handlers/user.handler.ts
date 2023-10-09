@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import User from "../models/user-model";
@@ -12,7 +12,11 @@ const getUserToken = (_id: string | Types.ObjectId) => {
   return authenticatedUserToken;
 };
 
-export const createUser = async (request: Request, response: Response) => {
+export const createUser = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { name, email, password } = request.body;
 
@@ -32,10 +36,14 @@ export const createUser = async (request: Request, response: Response) => {
     return response.status(201).send({ message: "User created successfully" });
   } catch (error) {
     console.log("error in createUser", error);
-    throw error;
+    next(error);
   }
 };
-export const loginUser = async (request: Request, response: Response) => {
+export const loginUser = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { email, password }: IUser = request.body;
     const existingUser = await User.findOne({ email });
@@ -60,6 +68,6 @@ export const loginUser = async (request: Request, response: Response) => {
     }
   } catch (error) {
     console.log("error in loginUser", error);
-    throw error;
+    next(error);
   }
 };
