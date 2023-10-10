@@ -23,31 +23,6 @@ export const getAllCategories = async (
   }
 };
 
-/**
- *
- * @param request TODO: Record get category by id
- * @param response
- * @returns
- */
-
-export const getCategoryById = async (
-  request: AuthRequest,
-  response: Response,
-  next: NextFunction
-) => {
-  try {
-    const { user } = request;
-    const { id } = request.params;
-    const category = await Category.findOne({
-      _id: id,
-    });
-    return response.send(category);
-  } catch (error) {
-    console.log("error in getCategoryById", error);
-    next(error);
-  }
-};
-
 export const createCategory = async (
   request: AuthRequest,
   response: Response,
