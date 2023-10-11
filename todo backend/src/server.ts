@@ -5,7 +5,6 @@ import categoryRoutes from "./routes/category.routes";
 import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import { authMiddleware } from "./middleware";
-import { errorMiddleware } from "./middleware/error";
 
 dotenv.config();
 const app = express();
@@ -18,9 +17,9 @@ app.get("/ping", (request: Request, response: Response) => {
   response.send("Pong");
 });
 
-app.use("/users", errorMiddleware, userRoutes);
-app.use("/categories", authMiddleware, errorMiddleware, categoryRoutes);
-app.use("/tasks", authMiddleware, errorMiddleware, taskRoutes);
+app.use("/users", userRoutes);
+app.use("/categories", authMiddleware, categoryRoutes);
+app.use("/tasks", authMiddleware, taskRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server up and running");

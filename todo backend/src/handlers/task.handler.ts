@@ -1,13 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { AuthRequest } from "../middleware";
 import Task from "../models/task-model";
 import { ITask } from "../types";
 
-export const getAllTasks = async (
-  request: AuthRequest,
-  response: Response,
-  next: NextFunction
-) => {
+export const getAllTasks = async (request: AuthRequest, response: Response) => {
   try {
     const userId = request.user;
     const tasks = await Task.find({
@@ -16,14 +12,12 @@ export const getAllTasks = async (
     response.send(tasks);
   } catch (error) {
     console.log("error in getAllTasks", error);
-    next(error);
   }
 };
 
 export const getAllTasksByCategory = async (
   request: AuthRequest,
-  response: Response,
-  next: NextFunction
+  response: Response
 ) => {
   try {
     const userId = request.user;
@@ -35,14 +29,12 @@ export const getAllTasksByCategory = async (
     response.send(tasks);
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
 export const getAllCompletedTasks = async (
   request: AuthRequest,
-  response: Response,
-  next: NextFunction
+  response: Response
 ) => {
   try {
     const userId = request.user;
@@ -53,14 +45,12 @@ export const getAllCompletedTasks = async (
     response.send(tasks);
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
 export const getTasksForToday = async (
   request: AuthRequest,
-  response: Response,
-  next: NextFunction
+  response: Response
 ) => {
   try {
     const userId = request.user;
@@ -73,15 +63,10 @@ export const getTasksForToday = async (
     response.send(tasks);
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
-export const createTask = async (
-  request: AuthRequest,
-  response: Response,
-  next: NextFunction
-) => {
+export const createTask = async (request: AuthRequest, response: Response) => {
   try {
     const userId = request.user;
     const { name, date, categoryId }: ITask = request.body;
@@ -95,14 +80,12 @@ export const createTask = async (
     response.send(task);
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
 export const toggleTaskStatus = async (
   request: AuthRequest,
-  response: Response,
-  next: NextFunction
+  response: Response
 ) => {
   try {
     const { isCompleted } = request.body;
@@ -119,15 +102,10 @@ export const toggleTaskStatus = async (
     response.send({ message: "Task status updated" });
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
-export const deleteTask = async (
-  request: AuthRequest,
-  response: Response,
-  next: NextFunction
-) => {
+export const deleteTask = async (request: AuthRequest, response: Response) => {
   try {
     const { id } = request.params;
     await Task.deleteOne({
@@ -136,15 +114,10 @@ export const deleteTask = async (
     response.send({ message: "Task deleted" });
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
 
-export const editTask = async (
-  request: AuthRequest,
-  response: Response,
-  next: NextFunction
-) => {
+export const editTask = async (request: AuthRequest, response: Response) => {
   try {
     const { _id, categoryId, date, name }: ITask = request.body;
     await Task.updateOne(
@@ -162,6 +135,5 @@ export const editTask = async (
     response.send({ message: "Task updated successfully" });
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
-    next(error);
   }
 };
