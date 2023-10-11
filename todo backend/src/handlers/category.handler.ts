@@ -8,6 +8,8 @@ import {
   updateCategoryFromModels,
 } from "../models/category-model";
 
+//Check how it works without the response parameter in the result
+
 export const getAllCategories = async (
   request: AuthRequest,
   response: Response
@@ -19,7 +21,7 @@ export const getAllCategories = async (
     //     return response.status(200).json(result);
     //   })
     // );
-    const result = await getAllCategoriesFromModels(request);
+    const result = await getAllCategoriesFromModels(request, response);
     return response.status(200).json(result);
   } catch (error) {
     console.log("error in getAllCategories", error);
@@ -31,7 +33,7 @@ export const getCategoryById = async (
   response: Response
 ) => {
   try {
-    const result = await getCategoryByIdFromModels(request);
+    const result = await getCategoryByIdFromModels(request, response);
     return response.status(200).json(result);
   } catch (error) {
     console.log("error in getCategoryById", error);
@@ -43,7 +45,7 @@ export const createCategory = async (
   response: Response
 ) => {
   try {
-    const result = await createCategoryFromModels(request);
+    const result = await createCategoryFromModels(request, response);
     return response.status(200).json(result);
   } catch (error) {
     console.log("error in createCategory", error);
@@ -55,7 +57,7 @@ export const deleteCategory = async (
   response: Response
 ) => {
   try {
-    await deleteCategoryFromModels(request);
+    await deleteCategoryFromModels(request, response);
     return response
       .status(200)
       .json({ message: "Category deleted successfully" });
@@ -69,7 +71,7 @@ export const updateCategory = async (
   response: Response
 ) => {
   try {
-    await updateCategoryFromModels(request);
+    await updateCategoryFromModels(request, response);
     response.status(200).json({ message: "Category updated successfully" });
   } catch (error) {
     console.log("error in updateCategory", error);

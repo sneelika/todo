@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Response } from "express";
 import categorySchemaProperties from "../schemaproperties/categorySchemaProperties";
 import { AuthRequest } from "../middleware";
 import { ICategory } from "../types";
@@ -8,7 +9,10 @@ const categorySchema = new mongoose.Schema(categorySchemaProperties);
 
 const Category = mongoose.model("Category", categorySchema);
 
-export const getAllCategoriesFromModels = async (request: AuthRequest) => {
+export const getAllCategoriesFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
   const { user } = request;
   try {
     const categories = await Category.find({
@@ -20,7 +24,10 @@ export const getAllCategoriesFromModels = async (request: AuthRequest) => {
   }
 };
 
-export const getCategoryByIdFromModels = async (request: AuthRequest) => {
+export const getCategoryByIdFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
   const { user } = request;
   const { id } = request.params;
   try {
@@ -33,7 +40,10 @@ export const getCategoryByIdFromModels = async (request: AuthRequest) => {
   }
 };
 
-export const createCategoryFromModels = async (request: AuthRequest) => {
+export const createCategoryFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
   try {
     const { color, icon, name }: ICategory = request.body;
     const { user } = request;
@@ -50,7 +60,10 @@ export const createCategoryFromModels = async (request: AuthRequest) => {
   }
 };
 
-export const deleteCategoryFromModels = async (request: AuthRequest) => {
+export const deleteCategoryFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
   try {
     const { id } = request.params;
     await Task.deleteMany({
@@ -64,7 +77,10 @@ export const deleteCategoryFromModels = async (request: AuthRequest) => {
   }
 };
 
-export const updateCategoryFromModels = async (request: AuthRequest) => {
+export const updateCategoryFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
   try {
     const { _id, color, icon, isEditable, name }: ICategory = request.body;
     await Category.updateOne(
