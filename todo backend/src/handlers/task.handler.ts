@@ -1,15 +1,20 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { AuthRequest } from "../middleware";
-import Task from "../models/task-model";
-import { ITask } from "../types";
+import {
+  createTaskFromModels,
+  deleteTaskFromModels,
+  editTaskFromModels,
+  getAllCompletedTasksFromModels,
+  getAllTasksByCategoryFromModels,
+  getAllTasksFromModels,
+  getTasksForTodayFromModels,
+  toggleTaskStatusFromModels,
+} from "../models/task-model";
 
 export const getAllTasks = async (request: AuthRequest, response: Response) => {
   try {
-    const userId = request.user;
-    const tasks = await Task.find({
-      user: userId,
-    });
-    response.send(tasks);
+    const result = await getAllTasksFromModels(request, response);
+    return response.status(200).json(result);
   } catch (error) {
     console.log("error in getAllTasks", error);
   }
@@ -20,13 +25,8 @@ export const getAllTasksByCategory = async (
   response: Response
 ) => {
   try {
-    const userId = request.user;
-    const { id } = request.params;
-    const tasks = await Task.find({
-      user: userId,
-      categoryId: id,
-    });
-    response.send(tasks);
+    const result = await getAllTasksByCategoryFromModels(request, response);
+    return response.status(200).json(result);
   } catch (error) {
     console.log("error in getAllTasksByCategory", error);
   }
@@ -37,14 +37,10 @@ export const getAllCompletedTasks = async (
   response: Response
 ) => {
   try {
-    const userId = request.user;
-    const tasks = await Task.find({
-      user: userId,
-      isCompleted: true,
-    });
-    response.send(tasks);
+    const result = await getAllCompletedTasksFromModels(request, response);
+    return response.status(200).json(result);
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in getAllCompletedTasks", error);
   }
 };
 
@@ -53,33 +49,19 @@ export const getTasksForToday = async (
   response: Response
 ) => {
   try {
-    const userId = request.user;
-    const todaysISODate = new Date();
-    todaysISODate.setHours(0, 0, 0, 0);
-    const tasks = await Task.find({
-      user: userId,
-      date: todaysISODate.toISOString(),
-    });
-    response.send(tasks);
+    const result = await getTasksForTodayFromModels(request, response);
+    return response.status(200).json(result);
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in getTasksForToday", error);
   }
 };
 
 export const createTask = async (request: AuthRequest, response: Response) => {
   try {
-    const userId = request.user;
-    const { name, date, categoryId }: ITask = request.body;
-
-    const task = await Task.create({
-      name,
-      date,
-      categoryId,
-      user: userId,
-    });
-    response.send(task);
+    const result = await createTaskFromModels(request, response);
+    return response.status(200).json(result);
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in createTask", error);
   }
 };
 
@@ -88,52 +70,27 @@ export const toggleTaskStatus = async (
   response: Response
 ) => {
   try {
-    const { isCompleted } = request.body;
-    const { id } = request.params;
-
-    const task = await Task.updateOne(
-      {
-        _id: id,
-      },
-      {
-        isCompleted: isCompleted,
-      }
-    );
-    response.send({ message: "Task status updated" });
+    await toggleTaskStatusFromModels(request, response);
+    return response.status(200).json({ message: "Task status updated" });
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in toggleTaskStatus", error);
   }
 };
 
 export const deleteTask = async (request: AuthRequest, response: Response) => {
   try {
-    const { id } = request.params;
-    await Task.deleteOne({
-      _id: id,
-    });
-    response.send({ message: "Task deleted" });
+    await deleteTaskFromModels(request, response);
+    response.status(200).json({ message: "Task deleted" });
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in deleteTask", error);
   }
 };
 
 export const editTask = async (request: AuthRequest, response: Response) => {
   try {
-    const { _id, categoryId, date, name }: ITask = request.body;
-    await Task.updateOne(
-      {
-        _id,
-      },
-      {
-        $set: {
-          name,
-          categoryId,
-          date,
-        },
-      }
-    );
-    response.send({ message: "Task updated successfully" });
+    await editTaskFromModels(request, response);
+    response.status(200).json({ message: "Task Edited" });
   } catch (error) {
-    console.log("error in getAllTasksByCategory", error);
+    console.log("error in editTask", error);
   }
 };
