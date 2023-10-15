@@ -5,13 +5,18 @@ import categoryRoutes from "./routes/category.routes";
 import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import { authMiddleware } from "./middleware";
-
+import cors from "cors";
 dotenv.config();
 const app = express();
 
 app.use(express.json());
 
 connectToDatabase();
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.get("/ping", (request: Request, response: Response) => {
   response.send("Pong");

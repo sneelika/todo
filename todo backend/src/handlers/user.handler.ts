@@ -6,6 +6,7 @@ import {
 
 export const createUser = async (request: Request, response: Response) => {
   try {
+    console.log(request);
     await createUserFromModels(request, response);
   } catch (error) {
     console.log("error in createUser", error);

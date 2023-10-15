@@ -2,15 +2,19 @@ import React from 'react';
 import AuthStackNavigator from './auth-stack-navigator';
 import {NavigationContainer} from '@react-navigation/native';
 import AppstackNavigator from './app-stack-navigator';
+import {Provider, useSelector} from 'react-redux';
+import store from '../store';
 
 const Navigation = () => {
-  const user = true;
+  const test = useSelector(state => !!state.user.token); //  useSelector to get the authentication status
+  const isAuthenticated = null;
 
   return (
-    <NavigationContainer>
-      {/* <AuthStackNavigator /> */}
-      <AppstackNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        {isAuthenticated ? <AppstackNavigator /> : <AuthStackNavigator />}
+      </NavigationContainer>
+    </Provider>
   );
 };
 

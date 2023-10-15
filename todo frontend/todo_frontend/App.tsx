@@ -4,15 +4,19 @@ import {ThemeProvider} from '@shopify/restyle';
 import theme from './src/utils/theme';
 import Navigation from './src/navigation';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider as StoreProvider} from 'react-redux';
+import store from './src/store/index';
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <SafeAreaProvider>
-        <Navigation />
-        <StatusBar />
-      </SafeAreaProvider>
-    </ThemeProvider>
+    <StoreProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <SafeAreaProvider>
+          <Navigation />
+          <StatusBar />
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </StoreProvider>
   );
 };
 
