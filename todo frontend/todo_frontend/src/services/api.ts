@@ -9,7 +9,6 @@ export const registerUser = async ({
 }: RegisterUserTypes) => {
   try {
     console.log('It came to the Register User API');
-    console.log(await axiosInstance.get('/ping'));
     const response = await axiosInstance.post('/users/create', {
       name: name,
       email: email,
@@ -32,9 +31,11 @@ export const loginUser = async ({email, password}: LoginUserTypes) => {
       email,
       password,
     });
+    console.log('It came here also');
     const _token = response.data.token;
     axiosInstance.defaults.headers.common['Authorization'] = _token;
-    saveToken(TOKEN_IDENTIFIER, _token);
+    console.log(_token);
+    await saveToken(TOKEN_IDENTIFIER, _token);
     return response.data.user;
   } catch (error) {
     console.log('error in loginUser', error);

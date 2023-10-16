@@ -7,15 +7,15 @@ import Button from '../../components/shared/button';
 import Input from '../../components/shared/input';
 import {Pressable} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {useForm} from 'react-hook-form';
+import {useForm, Controller} from 'react-hook-form';
 import {loginUser} from '../../services/api';
 import {IUser} from '../../types';
-import {login} from '../../store/actions';
+import {updateUser} from '../../store/actions';
 
 const SignInScreen = () => {
   const navigation = useNavigation<AuthScreenNavigationType<'SignIn'>>();
   const dispatch = useDispatch();
-  const navigateToSignUpScreen = () => {
+  const navigateToSignInScreen = () => {
     navigation.navigate('SignUp');
   };
 
@@ -35,28 +35,62 @@ const SignInScreen = () => {
       const {email, password} = data;
       const _user = await loginUser({
         email: email.toLowerCase(),
-        password: password.toLowerCase(),
+        password: password,
       });
-      dispatch(login(_user.token));
-    } catch (error) {}
+      console.log(_user);
+      dispatch(updateUser(_user.email));
+    } catch (error) {
+      console.log('error in loginUser', error);
+    }
   };
 
   return (
     <SafeAreaWrapper>
       <Box flex={1} px="5.5" justifyContent="center">
         <Text variant="textXl" fontWeight="700">
-          Welcome Back !
+          Welcome Back
         </Text>
         <Box mb="6" />
-
-        <Input label="Email" />
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Email"
+              error={errors.email}
+            />
+          )}
+          name="email"
+        />
         <Box mb="6" />
-        <Input label="Password" />
-        <Box height={44} />
-
-        <Pressable onPress={navigateToSignUpScreen}>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              label="Password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Password"
+              error={errors.password}
+              secureTextEntry
+            />
+          )}
+          name="password"
+        />
+        <Box mt="5.5" />
+        <Pressable onPress={navigateToSignInScreen}>
           <Text color="primary" textAlign="right">
-            Don't have an account? Register
+            Register?
           </Text>
         </Pressable>
         <Box mb="5.5" />

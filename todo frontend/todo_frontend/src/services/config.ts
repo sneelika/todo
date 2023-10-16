@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
 
-const BASE_URL = 'http://10.0.2.2:1337';
+const BASE_URL = 'http://54.163.8.178:1337';
 export const TOKEN_IDENTIFIER = 'todoToken';
 
 const axiosInstance = axios.create({
@@ -12,6 +12,7 @@ export const saveToken = async (TOKEN_IDENTIFIER: string, value: string) => {
   try {
   } catch (error) {
     // Store the credentials
+    console.log('It came to saveToken method');
     await Keychain.setGenericPassword(TOKEN_IDENTIFIER, value);
     console.log(TOKEN_IDENTIFIER, value);
     console.log('error in saveToken', error);
@@ -32,5 +33,8 @@ axiosInstance.interceptors.request.use(async req => {
     return req;
   }
 });
+
+export const fetcher = (url: string) =>
+  axiosInstance.get(url).then(res => res.data);
 
 export default axiosInstance;
