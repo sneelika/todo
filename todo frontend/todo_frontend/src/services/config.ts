@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
 
-const BASE_URL = 'http://54.163.8.178:1337';
+export const BASE_URL = 'http://35.175.188.159:1337';
 export const TOKEN_IDENTIFIER = 'todoToken';
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 

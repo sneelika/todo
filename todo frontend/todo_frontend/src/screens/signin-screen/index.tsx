@@ -38,7 +38,7 @@ const SignInScreen = () => {
         password: password,
       });
       console.log(_user);
-      dispatch(updateUser(_user.email));
+      dispatch(updateUser(_user.name));
     } catch (error) {
       console.log('error in loginUser', error);
     }

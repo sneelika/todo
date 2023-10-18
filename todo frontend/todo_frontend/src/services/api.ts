@@ -34,7 +34,7 @@ export const loginUser = async ({email, password}: LoginUserTypes) => {
     console.log('It came here also');
     const _token = response.data.token;
     axiosInstance.defaults.headers.common['Authorization'] = _token;
-    console.log(_token);
+    console.log('_token');
     await saveToken(TOKEN_IDENTIFIER, _token);
     return response.data.user;
   } catch (error) {
