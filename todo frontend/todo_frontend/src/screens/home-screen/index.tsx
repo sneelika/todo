@@ -1,19 +1,20 @@
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/shared/loader';
 import SafeAreaWrapper from '../../components/shared/safe-area-wrapper';
 import Task from '../../components/tasks/task';
 import TaskActions from '../../components/tasks/task-actions';
 import {fetcher} from '../../services/config';
-import store from '../../store/';
 import {ICategory, ITask} from '../../types';
 import {getGreeting} from '../../utils/helpers';
 import {AnimatedText, Box, Text} from '../../utils/theme';
 import {format} from 'date-fns';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Pressable} from 'react-native';
 import {ZoomInEasyDown} from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import useSWR from 'swr';
+import {updateUserToLogout} from '../../store/user/userActions';
 
 const today = new Date();
 
@@ -33,18 +34,35 @@ const HomeScreen = () => {
     return <Loader />;
   }
 
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(updateUserToLogout());
+  };
+
   return (
     <SafeAreaWrapper>
       <Box pt="1" />
       <Box flex={1} mx="4">
-        <AnimatedText
-          variant="textXl"
-          fontWeight="500"
-          entering={ZoomInEasyDown.delay(500).duration(700)}>
-          Good {greeting} {useSelector((state: any) => state.user.user)}
-        </AnimatedText>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between" // Pushes the "Logout" text to the end
+        >
+          <AnimatedText
+            variant="textXl"
+            fontWeight="500"
+            entering={ZoomInEasyDown.delay(500).duration(700)}>
+            Good {greeting} {user && user}
+          </AnimatedText>
+          <Box flexDirection="row">
+            {/* <Icon name="circle" size={16} /> */}
+            <Pressable onPress={handleLogout}>
+              <Text>Logout</Text>
+            </Pressable>
+          </Box>
+        </Box>
+
         <Text variant="textXl" fontWeight="500">
-          It’s {format(today, 'eeee, LLL dd')} - {tasks.length} tasks
+          It’s {format(today, 'eeee, LLL dd')} - {tasks.length} Tasks
         </Text>
         <Box height={26} />
         <TaskActions categoryId="" />

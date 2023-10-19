@@ -51,8 +51,8 @@ export const getGreeting = ({hour}: {hour: number}) => {
     return 'morning';
   }
   if (hour < 18) {
-    return 'evening';
+    return 'afternoon';
   } else {
-    return 'night';
+    return 'evening';
   }
 };

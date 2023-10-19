@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Response } from "express";
-import categorySchemaProperties from "../schemaproperties/categorySchemaProperties";
+import categorySchemaProperties from "../schemaproperties/categoryschema-properties";
 import { AuthRequest } from "../middleware";
 import { ICategory } from "../types";
 import Task from "../models/task-model";

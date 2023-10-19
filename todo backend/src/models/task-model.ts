@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import taskSchemaProperties from "../schemaproperties/taskSchemaProperties";
+import taskSchemaProperties from "../schemaproperties/taskschema-properties";
 import { AuthRequest } from "../middleware";
 import { Response } from "express";
 import { ITask } from "../types";

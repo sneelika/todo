@@ -20,7 +20,7 @@ export const authMiddleware = async (
     }
     const token = authorization;
     console.log(token);
-    const { _id } = jwt.verify(token, process.env.SECRET_KEY);
+    const { _id } = jwt.verify(token, process.env.ACCESS_SECRET_KEY);
     const existingUser = await User.findOne({ _id });
 
     if (existingUser) {

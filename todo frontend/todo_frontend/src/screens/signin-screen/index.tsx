@@ -10,7 +10,7 @@ import {useDispatch} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import {loginUser} from '../../services/api';
 import {IUser} from '../../types';
-import {updateUser} from '../../store/actions';
+import {updateUserToLogin} from '../../store/user/userActions';
 
 const SignInScreen = () => {
   const navigation = useNavigation<AuthScreenNavigationType<'SignIn'>>();
@@ -38,7 +38,7 @@ const SignInScreen = () => {
         password: password,
       });
       console.log(_user);
-      dispatch(updateUser(_user.name));
+      dispatch(updateUserToLogin(_user.name));
     } catch (error) {
       console.log('error in loginUser', error);
     }
