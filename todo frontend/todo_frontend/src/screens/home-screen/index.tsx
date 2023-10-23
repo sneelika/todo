@@ -3,7 +3,7 @@ import Loader from '../../components/shared/loader';
 import SafeAreaWrapper from '../../components/shared/safe-area-wrapper';
 import Task from '../../components/tasks/task';
 import TaskActions from '../../components/tasks/task-actions';
-import {fetcher} from '../../services/config';
+import axiosInstance, {fetcher} from '../../services/config';
 import {ITask} from '../../types';
 import {getGreeting} from '../../utils/helpers';
 import {AnimatedText, Box, Text} from '../../utils/theme';
@@ -16,14 +16,29 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import useSWR from 'swr';
 import {logout} from '../../store/user/userActions';
 import {logoutUser} from '../../services/api';
+import axios from 'axios';
 
 const today = new Date();
 
 const greeting = getGreeting({hour: new Date().getHours()});
 
 const HomeScreen = () => {
+  setTimeout(async () => {
+    const response = await axiosInstance.get('/users/new-token');
+    console.log(response);
+    try {
+      if (response.status === 200) {
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `${response.data['token']}`;
+      }
+    } catch (error) {
+      console.log('Error from HomeScreen Settimeout', error);
+    }
+  }, 30000);
+
   const user = useSelector((state: any) => state.user.user);
-  //Please check why not working
+
   console.log('User from store', user);
   const {
     data: tasks,
