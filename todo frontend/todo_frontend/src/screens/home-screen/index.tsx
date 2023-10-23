@@ -4,7 +4,7 @@ import SafeAreaWrapper from '../../components/shared/safe-area-wrapper';
 import Task from '../../components/tasks/task';
 import TaskActions from '../../components/tasks/task-actions';
 import {fetcher} from '../../services/config';
-import {ICategory, ITask} from '../../types';
+import {ITask} from '../../types';
 import {getGreeting} from '../../utils/helpers';
 import {AnimatedText, Box, Text} from '../../utils/theme';
 import {format} from 'date-fns';
@@ -14,7 +14,8 @@ import {ZoomInEasyDown} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import useSWR from 'swr';
-import {updateUserToLogout} from '../../store/user/userActions';
+import {logout} from '../../store/user/userActions';
+import {logoutUser} from '../../services/api';
 
 const today = new Date();
 
@@ -35,8 +36,9 @@ const HomeScreen = () => {
   }
 
   const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(updateUserToLogout());
+  const handleLogout = async () => {
+    await logoutUser();
+    dispatch(logout());
   };
 
   return (
@@ -54,7 +56,7 @@ const HomeScreen = () => {
             Good {greeting} {user && user}
           </AnimatedText>
           <Box flexDirection="row">
-            {/* <Icon name="circle" size={16} /> */}
+            <Icon name="circle" size={16} />
             <Pressable onPress={handleLogout}>
               <Text>Logout</Text>
             </Pressable>

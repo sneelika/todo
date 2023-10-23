@@ -5,7 +5,13 @@ import { Request } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { IUser } from "../types";
-import { getAccessToken, getRefreshToken } from "../utils/token";
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveRefreshToken,
+} from "../utils/token";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { REFRESH_TOKEN } from "../constants/tokens";
 
 const userSchema = new mongoose.Schema(
   userSchemaProperties,
@@ -17,6 +23,7 @@ const userSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", userSchema);
 
+/// Register New User
 export const handleNewUser = async (request: Request, response: Response) => {
   try {
     const { name, email, password } = request.body;
@@ -40,6 +47,7 @@ export const handleNewUser = async (request: Request, response: Response) => {
   }
 };
 
+/// Login  User
 export const handleLoginUser = async (request: Request, response: Response) => {
   try {
     const { email, password }: IUser = request.body;
@@ -78,13 +86,9 @@ export const handleLoginUser = async (request: Request, response: Response) => {
 
     console.log(result);
 
-    // Parse Refresh Token to the httpCookie
-    response.cookie("jwt", refresh_token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    // Save the refresh token to AsyncStorage
+    const save_refresh_token = await saveRefreshToken(refresh_token);
+    console.log(save_refresh_token);
 
     return response.status(200).json({
       access_token,
@@ -104,16 +108,18 @@ export const handleNewAccessToken = async (
 ) => {
   console.log("requesting new access token");
 
-  // Get the cookies from the request
-  const cookies = request.cookies;
+  // Get the refresh token
+  const refresh_token_from_async_storage = await AsyncStorage.getItem(
+    REFRESH_TOKEN
+  );
 
-  //Search for the cookie where cookie name is "jwt"
-  if (!cookies?.jwt) {
-    console.log("Invalid refresh token :", cookies?.jwt);
+  //Search for token in the async storage
+  if (!refresh_token_from_async_storage) {
+    console.log("Invalid refresh token :", refresh_token_from_async_storage);
     return response.status(401).json({ message: "Invalid token" });
   }
 
-  const refresh_token = cookies.jwt;
+  const refresh_token = refresh_token_from_async_storage;
   console.log(refresh_token);
 
   const auth = await User.findOne({ refreshToken: refresh_token });
@@ -130,9 +136,8 @@ export const handleNewAccessToken = async (
       console.log("decoded ", decoded);
       console.log("auth ", auth);
       console.log("Auth ID: ", auth._id, "Decoded ID: ", decoded._id);
-      const objectId = auth._id;
-      const objectIdString = objectId.toHexString();
-      if (err || objectIdString !== decoded._id) {
+
+      if (err || auth._id.toString() !== decoded._id) {
         console.log("requesting new access token failed invalid token");
         return response.status(403).json({ message: "Invalid token" });
       }
@@ -149,14 +154,16 @@ export const handleNewAccessToken = async (
 };
 
 export const handleLogout = async (request: Request, response: Response) => {
-  const cookies = request.cookies;
-  console.log("cookiee value :", cookies);
+  const refresh_token_from_async_storage = await AsyncStorage.getItem(
+    REFRESH_TOKEN
+  );
+  console.log("Refresh Token :", refresh_token_from_async_storage);
 
-  if (!cookies?.jwt) {
+  if (!refresh_token_from_async_storage) {
     return response.status(204).json({ message: "No token found" });
   }
 
-  const refresh_token = cookies.jwt;
+  const refresh_token = refresh_token_from_async_storage;
 
   const auth = await User.findOne({ refreshToken: refresh_token });
 
@@ -171,7 +178,7 @@ export const handleLogout = async (request: Request, response: Response) => {
 
   console.log(result);
 
-  response.clearCookie("jwt");
+  await AsyncStorage.removeItem(REFRESH_TOKEN);
   return response.status(200).json({
     message: "Logout successful",
   });

@@ -6,7 +6,7 @@ import {Provider, useSelector} from 'react-redux';
 import store from '../store';
 
 const Navigation = () => {
-  const isAuthenticated = useSelector(state => !!state.user.user); //  useSelector to get the authentication status
+  const isAuthenticated = useSelector((state: any) => !!state.user.user); //  useSelector to get the authentication status
 
   return (
     <Provider store={store}>
