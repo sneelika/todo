@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 const userSchemaProperties = {
   name: {
     type: String,
@@ -18,6 +20,18 @@ const userSchemaProperties = {
   logged_at: {
     type: Date,
   },
+  sharedTasks: [
+    {
+      task: {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+      },
+      readOnly: {
+        type: Boolean,
+        default: true,
+      },
+    },
+  ],
 };
 
 export default userSchemaProperties;

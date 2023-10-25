@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://35.172.185.114:1337';
+export const BASE_URL = 'http://18.208.245.13:1337';
 export const TOKEN_IDENTIFIER = 'todoToken';
 
 export const axiosInstance = axios.create({

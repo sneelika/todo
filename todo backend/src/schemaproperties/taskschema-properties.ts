@@ -23,6 +23,18 @@ const taskSchemaProperties = {
     type: String,
     required: true,
   },
+  sharedWith: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+      readOnly: {
+        type: Boolean,
+        default: true,
+      },
+    },
+  ],
 };
 
 export default taskSchemaProperties;

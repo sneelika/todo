@@ -94,3 +94,12 @@ export const editTask = async (request: AuthRequest, response: Response) => {
     console.log("error in editTask", error);
   }
 };
+
+export const shareTask = async (request: AuthRequest, response: Response) => {
+  try {
+    await shareTask(request, response);
+    response.status(200).json({ message: "Task Shared" });
+  } catch (error) {
+    console.log("error in shareTask", error);
+  }
+};

@@ -3,6 +3,7 @@ import taskSchemaProperties from "../schemaproperties/taskschema-properties";
 import { AuthRequest } from "../middleware";
 import { Response } from "express";
 import { ITask } from "../types";
+import User from "./user-model";
 
 const taskSchema = new mongoose.Schema(taskSchemaProperties, {
   timestamps: true,
@@ -151,6 +152,46 @@ export const editTaskFromModels = async (
     );
   } catch (error) {
     console.error("Error in editTaskFromModels:", error);
+  }
+};
+
+export const shareTaskFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
+  const { taskId, sharedUserId } = request.body;
+
+  try {
+    const task = await Task.findById(taskId);
+    const user = await User.findById(sharedUserId);
+
+    if (!task || !user) {
+      return response.status(404).json({ message: "Task or user not found" });
+    }
+
+    task.sharedWith.push({ user: sharedUserId, readOnly: true });
+    await task.save();
+
+    response.json({ message: "Task shared successfully" });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const viewTaskFromModels = async (
+  request: AuthRequest,
+  response: Response
+) => {
+  const { userId } = request.params;
+
+  try {
+    const sharedTasks = await Task.find({ "sharedWith.user": userId });
+
+    response.json({ sharedTasks });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
   }
 };
 

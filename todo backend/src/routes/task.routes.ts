@@ -8,8 +8,8 @@ import {
   getAllTasksByCategory,
   getTasksForToday,
   toggleTaskStatus,
+  shareTask,
 } from "../handlers/task.handler";
-
 
 const taskRoutes = express.Router();
 
@@ -21,5 +21,6 @@ taskRoutes.post("/create", createTask);
 taskRoutes.put("/update/:id", toggleTaskStatus);
 taskRoutes.delete("/:id", deleteTask);
 taskRoutes.put("/edit/:id", editTask);
+taskRoutes.put("/share", shareTask);
 
 export default taskRoutes;

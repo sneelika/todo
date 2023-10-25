@@ -8,7 +8,7 @@ import {ITask} from '../../types';
 import {getGreeting} from '../../utils/helpers';
 import {AnimatedText, Box, Text} from '../../utils/theme';
 import {format} from 'date-fns';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, Pressable} from 'react-native';
 import {ZoomInEasyDown} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -23,19 +23,24 @@ const today = new Date();
 const greeting = getGreeting({hour: new Date().getHours()});
 
 const HomeScreen = () => {
-  setTimeout(async () => {
-    const response = await axiosInstance.get('/users/new-token');
-    console.log(response);
-    try {
-      if (response.status === 200) {
-        axios.defaults.headers.common[
-          'Authorization'
-        ] = `${response.data['token']}`;
+  useEffect(() => {
+    const refreshAccessToken = async () => {
+      try {
+        const response = await axiosInstance.get('/users/new-token');
+        if (response.status === 200) {
+          axios.defaults.headers.common[
+            'Authorization'
+          ] = `${response.data['token']}`;
+        }
+      } catch (error) {
+        console.log('Error from HomeScreen SetTimeout', error);
       }
-    } catch (error) {
-      console.log('Error from HomeScreen Settimeout', error);
-    }
-  }, 30000);
+
+      setTimeout(refreshAccessToken, 30000);
+    };
+
+    refreshAccessToken();
+  }, []);
 
   const user = useSelector((state: any) => state.user.user);
 
