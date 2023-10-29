@@ -9,6 +9,7 @@ import {
   getAllTasksFromModels,
   getTasksForTodayFromModels,
   toggleTaskStatusFromModels,
+  viewSharedTaskFromModels,
 } from "../models/task-model";
 
 export const getAllTasks = async (request: AuthRequest, response: Response) => {
@@ -101,5 +102,17 @@ export const shareTask = async (request: AuthRequest, response: Response) => {
     response.status(200).json({ message: "Task Shared" });
   } catch (error) {
     console.log("error in shareTask", error);
+  }
+};
+
+export const viewSharedTask = async (
+  request: AuthRequest,
+  response: Response
+) => {
+  try {
+    await viewSharedTaskFromModels(request, response);
+    response.status(200).json({ message: "Task Viewed" });
+  } catch (error) {
+    console.log("error in viewSharedTask", error);
   }
 };

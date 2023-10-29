@@ -12,36 +12,15 @@ import React, {useEffect} from 'react';
 import {FlatList, Pressable} from 'react-native';
 import {ZoomInEasyDown} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import useSWR from 'swr';
 import {logout} from '../../store/user/userActions';
 import {logoutUser} from '../../services/api';
-import axios from 'axios';
 
 const today = new Date();
 
 const greeting = getGreeting({hour: new Date().getHours()});
 
 const HomeScreen = () => {
-  useEffect(() => {
-    const refreshAccessToken = async () => {
-      try {
-        const response = await axiosInstance.get('/users/new-token');
-        if (response.status === 200) {
-          axios.defaults.headers.common[
-            'Authorization'
-          ] = `${response.data['token']}`;
-        }
-      } catch (error) {
-        console.log('Error from HomeScreen SetTimeout', error);
-      }
-
-      setTimeout(refreshAccessToken, 30000);
-    };
-
-    refreshAccessToken();
-  }, []);
-
   const user = useSelector((state: any) => state.user.user);
 
   console.log('User from store', user);

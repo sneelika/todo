@@ -1,11 +1,11 @@
 {
-  "name": "todo",
+  "name": "todo-backend",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --exec ts-node ./src/server.ts",
+    "dev": "ts-node ./src/server.ts && node ./dist/server.js",
     "start": "node ./dist/server.js"
   },
   "dependencies": {

@@ -9,6 +9,7 @@ import {
   getTasksForToday,
   toggleTaskStatus,
   shareTask,
+  viewSharedTask,
 } from "../handlers/task.handler";
 
 const taskRoutes = express.Router();
@@ -22,5 +23,6 @@ taskRoutes.put("/update/:id", toggleTaskStatus);
 taskRoutes.delete("/:id", deleteTask);
 taskRoutes.put("/edit/:id", editTask);
 taskRoutes.put("/share", shareTask);
+taskRoutes.get("/view-shared-tasks/:userId", viewSharedTask);
 
 export default taskRoutes;

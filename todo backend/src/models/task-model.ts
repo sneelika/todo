@@ -179,7 +179,7 @@ export const shareTaskFromModels = async (
   }
 };
 
-export const viewTaskFromModels = async (
+export const viewSharedTaskFromModels = async (
   request: AuthRequest,
   response: Response
 ) => {
