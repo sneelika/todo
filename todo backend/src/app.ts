@@ -7,7 +7,6 @@ import userRoutes from "./routes/user.routes";
 import { authMiddleware } from "./middleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
 dotenv.config();
 const app = express();
 
@@ -36,6 +35,7 @@ app.all("*", (request: Request, response: Response) => {
   response.send("404|not found");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log("Server up and running");
-});
+// app.listen(process.env.PORT, () => {
+//   console.log("Server up and running");
+// });
+export default app;
