@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import connectToDatabase from "./db";
-import categoryRoutes from "./routes/category.routes";
-import taskRoutes from "./routes/task.routes";
-import userRoutes from "./routes/user.routes";
-import { authMiddleware } from "./middleware";
+import connectToDatabase from "./src/db";
+import categoryRoutes from "./src/routes/category.routes";
+import taskRoutes from "./src/routes/task.routes";
+import userRoutes from "./src/routes/user.routes";
+import { authMiddleware } from "./src/middleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 dotenv.config();

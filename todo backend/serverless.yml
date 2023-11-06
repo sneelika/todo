@@ -60,7 +60,7 @@ provider:
 
 functions:
   hello:
-    handler: lambda.hello
+    handler: handler.hello
     events:
       - http: ANY /{proxy*}
       - http: ANY /
